@@ -63,7 +63,7 @@ fun LoginScreen() {
         )
         Button(
             onClick = {
-
+                //TODO: Navigate to List Screen
             }
         ) {
             Text(text = "Login")

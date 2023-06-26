@@ -3,6 +3,7 @@ package com.example.composenavigationtalk
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,17 +26,20 @@ internal fun ListScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            repeat(12) {
+            repeat(20) {
                 item {
-                    Box(
+                    OutlinedButton(
                         modifier = Modifier
-                            .background(color = Color.LightGray)
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp),
-                        contentAlignment = Alignment.TopStart
+                            .fillMaxWidth(),
+                        onClick = {
+                            //TODO: Navigate to Detail Screen
+                        }
                     ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
                                 modifier = Modifier
@@ -43,10 +47,11 @@ internal fun ListScreen() {
                                     .height(50.dp)
                                     .background(Color.White)
                             )
+                            Spacer(modifier = Modifier.width(15.dp))
                             Column {
-                                Text(style = titleStyle, text = "Title")
-                                Text(style = subtitleStyle, text = "Subtitle")
-                                Text(style = infoStyle, text = "Additional Information")
+                                Text(style = titleStyle, text = "Title ${it + 1}")
+                                Text(style = subtitleStyle, text = "Subtitle ${it + 1}")
+                                Text(style = infoStyle, text = "Additional Information ${it + 1}")
                             }
                         }
                     }
