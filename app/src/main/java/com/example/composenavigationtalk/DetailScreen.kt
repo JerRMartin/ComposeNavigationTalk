@@ -10,13 +10,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.composenavigationtalk.views.NavigationBarView
+import com.example.composenavigationtalk.views.urlDecode
 
 @Composable
-internal fun DetailScreen() {
+internal fun DetailScreen(
+    navController: NavController,
+    icon: Int,
+    title: String,
+    subtitle: String?,
+    addInfo: String?,
+) {
     Column {
+        NavigationBarView(currentScreen = Screen.DetailScreen, canNavigateBack = true) {
+            navController.navigate(Screen.ListScreen.route)
+        }
         Box(
             modifier = Modifier.padding(25.dp),
             contentAlignment = Alignment.Center
@@ -28,7 +40,7 @@ internal fun DetailScreen() {
                     .background(Color.White)
             )
             Icon(
-                icons.random(), // TODO: Get icon from previous screen
+                icons[icon], // This is not the correct way to do something like this, just for simplicity here
                 contentDescription = "Icon",
                 modifier = Modifier.scale(4f),
                 tint = Color.Black
@@ -37,13 +49,17 @@ internal fun DetailScreen() {
 
         LazyColumn(modifier = Modifier.padding(horizontal = 50.dp)) {
             item {
-                Text(style = titleStyle, text = "Title" ) // TODO: Get title from previous screen
+                Text(style = titleStyle, text = title.urlDecode())
             }
             item {
-                Text(style = subtitleStyle, text = "Subtitle") // TODO: Get subtitle from previous screen
+                if (subtitle != null) {
+                    Text(style = subtitleStyle, text = subtitle.urlDecode())
+                }
             }
             item {
-                Text(style = infoStyle, text = "Additional Information") // TODO: Get additional info from previous screen
+                if (addInfo != null) {
+                    Text(style = infoStyle, text = addInfo.urlDecode())
+                }
             }
         }
     }

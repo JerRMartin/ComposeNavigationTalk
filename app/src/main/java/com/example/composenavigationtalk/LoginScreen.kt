@@ -19,10 +19,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.composenavigationtalk.views.urlEncode
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navController: NavController
+) {
     val focusManager = LocalFocusManager.current
 
     var usernameText: String by remember { mutableStateOf("") }
@@ -40,7 +44,7 @@ fun LoginScreen() {
                 .padding(bottom = 15.dp)
                 .background(Color.White),
             value = usernameText,
-            onValueChange = {usernameText = it},
+            onValueChange = { usernameText = it },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -51,7 +55,7 @@ fun LoginScreen() {
                 .padding(bottom = 15.dp)
                 .background(Color.White),
             value = passwordText,
-            onValueChange = {passwordText = it},
+            onValueChange = { passwordText = it },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -64,6 +68,10 @@ fun LoginScreen() {
         Button(
             onClick = {
                 //TODO: Navigate to List Screen
+                navController.navigate(
+                    Screen.ListScreen.route
+                            + "?username=${usernameText.urlEncode()}"
+                )
             }
         ) {
             Text(text = "Login")
