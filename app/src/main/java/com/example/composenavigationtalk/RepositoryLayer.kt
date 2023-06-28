@@ -17,7 +17,7 @@ class RepositoryLayer {
     )
 
     private val icons =
-        listOf(  // not making this private so we can read it in Detail Screen, again BAD TO DO!!
+        listOf(
             Icons.Rounded.Star,
             Icons.Rounded.Face,
             Icons.Rounded.Person,
