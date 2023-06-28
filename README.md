@@ -1,3 +1,4 @@
+
 # Compose Navigation Dev Talk
 
 
@@ -17,8 +18,8 @@ To define a navigation graph in code, you can create a graph using the `navigati
 val navController = rememberNavController()
 NavHost(navController = navController, startDestination = "home") {
     composable("home") { HomeScreen(navController) }
-    composable("details/{itemId}") { backStackEntry ->
-        val itemId = backStackEntry.arguments?.getString("itemId")
+    composable("details/{itemId}") { it ->
+        val itemId = it.arguments?.getString("itemId")
         DetailsScreen(itemId)
     }
 }
@@ -91,21 +92,53 @@ In this example, we navigate to the "details/{itemId}" destination with the argu
 
 ### Accessing Arguments in Composables
 
-To access the arguments passed to a destination in its corresponding composable, you can use the `NavBackStackEntry` provided by the navigation library:
+To access the arguments passed to a destination in its corresponding composable, you can access them directly like you would with any other parameter:
 
 ```
 @Composable
-fun DetailsScreen(navController: NavController) {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    val arguments = navBackStackEntry.value?.arguments
-    val itemId = arguments?.getString("itemId")
-
+fun DetailsScreen(
+	navController: NavController,
+	itemId: String,
+) {
     // Use the itemId in your composable
 }
 ```
 
-In this example, we retrieve the current `NavBackStackEntry` using `currentBackStackEntryAsState()` and access the arguments using `arguments`. We can then extract the specific argument value, in this case, "itemId", using `getString()`.
+In this example, we passed `itemId` to the DetailsScreen by passing it as part of the path to the destination, we can then use it within our composable.
 
-## Repository Pattern
+## Passing Data Between Destinations
 
-The Repository Pattern is a software design pattern that helps manage data access and provides a clean separation between the data layer and the rest of the application. When passing arguments in Compose Navigation, it is recommended to follow the Repository Pattern approach. This ensures that the navigation layer remains decoupled from the data source layer, promoting code maintainability and testability.
+Traditionally, when navigating between destinations, you would pass arguments as bundles or primitive types using key-value pairs. However, this approach is error-prone, as it relies on string keys and type casting, which can lead to runtime exceptions if the keys or types do not match.
+
+When we pass `navArguments` to our destinations we must define the `NavType` in order to avoid typing conflicts.
+
+```
+composable(route = Screen.ListScreen.route + "?username={username}",  
+	  arguments = listOf(  
+	        navArgument("username") {  
+				  type = NavType.StringType
+				  nullable = true
+			}
+	  )
+) {  
+ListScreen( it -> 
+        navController = navController,
+        username = it.arguments?.getString("username")
+)
+```
+
+In the above code snippet we are defining a `navArgument` called "username", we then assign it a type using `NavType.StringType` and then make it `nullable`. When we would like to pass this variable to the screen we then grab the string "username" out of the arguments.
+
+When passing arguments between destinations we can only pass:
+- Integer
+- Float
+- Long
+- Boolean
+- String
+- Resource Reference
+- Custom Parcelable
+- Custom Serializable
+- Custom Enum
+
+Therefore when we desire to pass more complex data between destinations we can use
+the Repository Pattern to help manage data access and provides a clean separation between the data layer and the rest of the application, and allow passing a reference to a more complex data object. 
