@@ -14,7 +14,8 @@ fun Navigation() {
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController)
         }
-        composable(route = Screen.ListScreen.route + "?username={username}",
+        composable(
+            route = Screen.ListScreen.route + "?username={username}",
             arguments = listOf(
                 navArgument("username") {
                     type = NavType.StringType

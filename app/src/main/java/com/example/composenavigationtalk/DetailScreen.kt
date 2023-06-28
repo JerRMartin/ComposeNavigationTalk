@@ -26,7 +26,7 @@ internal fun DetailScreen(
     val currentItem = repositoryLayer.getListItem(itemId)
     Column {
         NavigationBarView(currentScreen = Screen.DetailScreen, canNavigateBack = true) {
-            navController.navigate(Screen.ListScreen.route)
+            navController.popBackStack(Screen.ListScreen.route, inclusive = false) // here we are popping off the stack to make sure the backstack is right
         }
         Box(
             modifier = Modifier.padding(25.dp),
