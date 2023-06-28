@@ -28,52 +28,13 @@ val titleStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
 val subtitleStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Normal)
 val infoStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Light)
 
-val icons =
-    listOf(  // not making this private so we can read it in Detail Screen, again BAD TO DO!!
-        Icons.Rounded.Star,
-        Icons.Rounded.Face,
-        Icons.Rounded.Person,
-        Icons.Default.ThumbUp
-    )
-
-private val listItems = listOf(
-    ListItem(
-        0,
-        "Star Item",
-        "Important Item",
-        "12/25/2023"
-    ),
-    ListItem(
-        1,
-        "Face Item",
-        "Its a Face Item",
-        "09/09/2009"
-    ),
-    ListItem(
-        2,
-        "Person Item",
-        "Who let this guy in?",
-        "02/28/2018"
-    ),
-    ListItem(
-        3, "Thumbs Up Item",
-        "Honestly, Great Job.",
-        "01/01/2021"
-    ),
-    ListItem(
-        1,
-        "A Different Face Item",
-        "Its a Different Face Item",
-        "09/10/2009"
-    ),
-)
-
 
 @Composable
 internal fun ListScreen(
     navController: NavController,
-    username: String?
+    username: String?,
 ) {
+    val repositoryLayer = RepositoryLayer()
     Column {
         NavigationBarView(currentScreen = Screen.ListScreen, canNavigateBack = false)
         if (!username.isNullOrBlank()) {
@@ -83,20 +44,14 @@ internal fun ListScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            listItems.forEach {
+            repositoryLayer.getListItems().forEach {
                 item {
                     OutlinedButton(
                         modifier = Modifier
                             .fillMaxWidth(),
                         onClick = {
                             //TODO: Navigate to Detail Screen
-                            navController.navigate(
-                                Screen.DetailScreen.route +
-                                        "/${it.icon}" +
-                                        "/${it.title.urlEncode()}" +
-                                        "?subtitle=${it.subtitle?.urlEncode()}" +
-                                        "?add_info=${it.add_info?.urlEncode()}"
-                            )
+                            navController.navigate(Screen.DetailScreen.route + "/${it.id}")
                         }
                     ) {
                         Row(
@@ -115,7 +70,7 @@ internal fun ListScreen(
                                         .background(Color.White)
                                 )
                                 Icon(
-                                    icons[it.icon],
+                                    repositoryLayer.getIcon(it.icon),
                                     contentDescription = "Icon",
                                     modifier = Modifier.scale(2f),
                                     tint = Color.Black

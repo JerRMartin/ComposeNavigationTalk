@@ -20,11 +20,10 @@ import com.example.composenavigationtalk.views.urlDecode
 @Composable
 internal fun DetailScreen(
     navController: NavController,
-    icon: Int,
-    title: String,
-    subtitle: String?,
-    addInfo: String?,
+    itemId: Int
 ) {
+    val repositoryLayer = RepositoryLayer()
+    val currentItem = repositoryLayer.getListItem(itemId)
     Column {
         NavigationBarView(currentScreen = Screen.DetailScreen, canNavigateBack = true) {
             navController.navigate(Screen.ListScreen.route)
@@ -40,7 +39,7 @@ internal fun DetailScreen(
                     .background(Color.White)
             )
             Icon(
-                icons[icon], // This is not the correct way to do something like this, just for simplicity here
+                repositoryLayer.getIcon(currentItem.icon), // This is not the correct way to do something like this, just for simplicity here
                 contentDescription = "Icon",
                 modifier = Modifier.scale(4f),
                 tint = Color.Black
@@ -49,16 +48,16 @@ internal fun DetailScreen(
 
         LazyColumn(modifier = Modifier.padding(horizontal = 50.dp)) {
             item {
-                Text(style = titleStyle, text = title.urlDecode())
+                Text(style = titleStyle, text = currentItem.title.urlDecode())
             }
             item {
-                if (subtitle != null) {
-                    Text(style = subtitleStyle, text = subtitle.urlDecode())
+                if (currentItem.subtitle != null) {
+                    Text(style = subtitleStyle, text = currentItem.subtitle.urlDecode())
                 }
             }
             item {
-                if (addInfo != null) {
-                    Text(style = infoStyle, text = addInfo.urlDecode())
+                if (currentItem.add_info != null) {
+                    Text(style = infoStyle, text = currentItem.add_info.urlDecode())
                 }
             }
         }

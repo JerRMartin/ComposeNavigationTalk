@@ -27,34 +27,16 @@ fun Navigation() {
             )
         }
         composable(
-            route = Screen.DetailScreen.route +
-                    "/{icon}" +
-                    "/{title}" +
-                    "?subtitle={subtitle}" +
-                    "?add_info={add_info}",
+            route = Screen.DetailScreen.route + "/{item_id}",
             arguments = listOf(
-                navArgument("icon") {
+                navArgument("item_id") {
                     type = NavType.IntType
-                },
-                navArgument("title") {
-                    type = NavType.StringType
-                },
-                navArgument("subtitle") {
-                    type = NavType.StringType
-                    nullable = true
-                },
-                navArgument("add_info") {
-                    type = NavType.StringType
-                    nullable = true
                 }
             )
         ) {
             DetailScreen(
                 navController = navController,
-                icon = it.arguments?.getInt("icon") ?: 0,
-                title = it.arguments?.getString("title") ?: "fallback_title",
-                subtitle = it.arguments?.getString("subtitle"),
-                addInfo = it.arguments?.getString("add_info"),
+                itemId = it.arguments?.getInt("item_id") ?: 0
             )
         }
     }
